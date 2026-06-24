@@ -20,7 +20,8 @@ async function getUserById(req, res, next) {
 
 async function createUser(req, res, next) {
   try {
-    const user = await userService.createUser(req.body);
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const user = await userService.createUser({ ...req.body, password: hashedPassword });
     res.status(201).json({ success: true, data: user });
   } catch (err) {
     next(err);
