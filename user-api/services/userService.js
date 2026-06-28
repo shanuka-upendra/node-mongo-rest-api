@@ -74,9 +74,16 @@ async function loginUser({ email, password }) {
     throw err;
   }
 
+  // generate a JWT token for the user
+  const token = jwt.sign(
+    { userId: user._id, email: user.email },
+    config.jwtSecret,
+    { expiresIn: config.jwtExpiresIn }
+  );
+
   // remove password before returning
   const { password: _, ...safeUser } = user;
-  return safeUser;
+  return { ...safeUser, token };
 }
 
 async function updateUser(id, updates) {
