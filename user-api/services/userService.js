@@ -1,8 +1,35 @@
 const userRepository = require('../repositories/userRepository');
 const bcrypt = require('bcryptjs');
 
-async function getAllUsers() {
-  return userRepository.findAll();
+async function getAllUsers({ page = 1, limit = 10, search = '' }) {
+  // build filter — if search is provided, match name OR email
+  const filter = search
+    ? {
+        $or: [
+          { name:  { $regex: search, $options: 'i' } }, // i = case insensitive
+          { email: { $regex: search, $options: 'i' } },
+        ],
+      }
+    : {};
+
+  const skip = (page - 1) * limit; // page 1 → skip 0, page 2 → skip 10
+
+  const [users, total] = await Promise.all([
+    userRepository.findAll({ filter, skip, limit }),
+    userRepository.countDocuments(filter),
+  ]);
+
+  return {
+    users,
+    pagination: {
+      total,                                        // total matching documents
+      page,                                         // current page
+      limit,                                        // items per page
+      totalPages: Math.ceil(total / limit),         // total pages
+      hasNextPage: page < Math.ceil(total / limit), // is there a next page?
+      hasPrevPage: page > 1,                        // is there a previous page?
+    },
+  };
 }
 
 async function getUserById(id) {
