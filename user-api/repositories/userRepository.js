@@ -5,8 +5,12 @@ function getUserCollection() {
     return getDB().collection('users');
 }
 
-async function findAll() {
-    return getUserCollection().find({}).toArray();
+async function findAll({ filter = {}, skip = 0, limit = 10 } = {}) {
+    return getUserCollection().find(filter).skip(skip).limit(limit).toArray();
+}
+
+async function countDocuments(filter = {}) {
+    return getUserCollection().countDocuments(filter);
 }
 
 async function findById(id) {
@@ -35,4 +39,4 @@ async function deleteOne(id) {
     return result.deletedCount;
 }
 
-module.exports = { findAll, findById, findByEmail, insertOne, updateOne, deleteOne };
+module.exports = { findAll, findById, findByEmail, insertOne, updateOne, deleteOne, countDocuments };
