@@ -2,10 +2,29 @@ const userService = require('../services/userService');
 
 async function getAllUsers(req, res, next) {
   try {
-    const users = await userService.getAllUsers();
-    res.json({ success: true, count: users.length, data: users });
+    // parse query params — convert to correct types
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || '';
+
+    // guard against abuse
+    const safePage = page < 1 ? 1 : page;
+    const safeLimit = limit > 100 ? 100 : limit; // max 100 per page
+
+    const result = await userService.getAllUsers({
+      page: safePage,
+      limit: safeLimit,
+      search,
+    });
+
+    res.json({
+      success: true,
+      count: result.users.length,
+      pagination: result.pagination,
+      data: result.users,
+    });
   } catch (err) {
-    next(err); // pass to error handler
+    next(err);
   }
 }
 
