@@ -57,3 +57,44 @@ npm start
 ```
 
 When the server starts, it listens on `http://localhost:3000` by default.
+
+## API Endpoints
+
+Base URL: `http://localhost:3000/api`
+
+### Auth (public)
+
+- `POST /auth/register` — Register a user
+- `POST /auth/login` — Login and receive JWT token
+
+### Users (protected)
+
+All routes below require a valid JWT in the Authorization header.
+
+- `GET /users` — List users (supports `page`, `limit`, `search`)
+- `GET /users/:id` — Get user by ID
+- `POST /users` — Create user
+- `PUT /users/:id` — Update user fields
+- `DELETE /users/:id` — Delete user
+
+## Sample Request Bodies
+
+Register:
+
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "pass1234",
+  "age": 28
+}
+```
+
+Login:
+
+```json
+{
+  "email": "john@example.com",
+  "password": "pass1234"
+}
+```
