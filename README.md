@@ -98,3 +98,23 @@ Login:
   "password": "pass1234"
 }
 ```
+
+## Project Structure
+
+```text
+user-api/
+├── config/           # Environment and app config
+├── controllers/      # Request handlers
+├── db/               # MongoDB connection setup
+├── middleware/       # Auth, validators, error handling
+├── repositories/     # Data access layer
+├── routes/           # API route definitions
+├── services/         # Business logic layer
+└── server.js         # App entry point
+```
+
+## Troubleshooting
+
+- Ensure MongoDB is running and `MONGO_URI` is correct.
+- If requests fail with 401, login again and use a fresh JWT.
+- If validation fails, check response `errors` for field-specific messages.
