@@ -34,3 +34,26 @@ DB_NAME=user-api
 JWT_SECRET=your-strong-secret
 JWT_EXPIRES_IN=7d
 ```
+
+## Installation
+
+```bash
+cd /home/runner/work/node-mongo-rest-api/node-mongo-rest-api/user-api
+npm install
+```
+
+## Run the API
+
+Development mode:
+
+```bash
+npm run dev
+```
+
+Production mode:
+
+```bash
+npm start
+```
+
+When the server starts, it listens on `http://localhost:3000` by default.
